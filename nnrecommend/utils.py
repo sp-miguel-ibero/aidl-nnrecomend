@@ -63,13 +63,13 @@ def train_one_epoch(model: torch.nn.Module, optimizer: torch.optim.Optimizer, da
     return mean(total_loss)
 
 
-def test(model, full_dataset, device, topk=10):
+def test(model, dataset, testset, device, topk=10):
     # Test the HR and NDCG for the model @topK
     model.eval()
 
     HR, NDCG = [], []
 
-    for user_test in full_dataset.test_set:
+    for user_test in testset:
         gt_item = user_test[0][1]
 
         user_test_tensor = torch.from_numpy(user_test).to(dtype=torch.long, device=device)
