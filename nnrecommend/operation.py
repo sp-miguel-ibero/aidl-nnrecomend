@@ -295,12 +295,15 @@ class RunTracker:
         self.__tb.add_scalar('train/lr', lr, epoch)
 
         if hasattr(model, 'get_embedding_weight'):
-            weight = model.get_embedding_weight()
-            if self.__embedding_epoch_num > 0 and epoch % self.__embedding_epoch_num == 0:
-                self.__tb.add_embedding(weight, global_step=epoch,
-                    metadata=self.__embedding_md,
-                    metadata_header=self.__embedding_md_header)
-            self.__tb.add_histogram("embedding", weight, global_step=epoch)
+            try:
+                weight = model.get_embedding_weight()
+                if self.__embedding_epoch_num > 0 and epoch % self.__embedding_epoch_num == 0:
+                    self.__tb.add_embedding(weight, global_step=epoch,
+                        metadata=self.__embedding_md,
+                        metadata_header=self.__embedding_md_header)
+                self.__tb.add_histogram("embedding", weight, global_step=epoch)
+            except:
+                pass
         self.__tb.flush()
 
     def track_test_result(self, epoch: int, result: TestResult):
